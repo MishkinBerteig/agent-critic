@@ -1,0 +1,20 @@
+services:
+  agent-critic:
+    build: .
+    image: agent-critic:latest
+    container_name: agent-critic
+    ports:
+      - "8090:8090"            # Critique Envelope service (HTTP)
+    environment:
+      LM_STUDIO_BASE: "http://host.docker.internal:12345/v1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./config:/app/config:ro      # live config (edit + restart, no rebuild)
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8090/healthz', timeout=5) else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

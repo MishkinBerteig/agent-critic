@@ -1,0 +1,16 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.py[cod]
+*.egg-info
+dist
+build
+.uv
+.pytest_cache
+tests
+*.jsonl
+.agent-critic
+.DS_Store
+.idea
+.vscode

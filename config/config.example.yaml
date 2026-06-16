@@ -1,0 +1,60 @@
+# Agent Critic — example configuration.
+# Copy to config/config.yaml (gitignored) and adjust for your deployment.
+#
+# Each critic model is an independent OpenAI-compatible endpoint: you can freely
+# mix local servers (LM Studio, llama.cpp, vLLM, Ollama) and hosted APIs
+# (OpenAI, Together, Fireworks, a remote vLLM, ...). Each entry has its own
+# base_url and api_key, and any value may reference an environment variable as
+# ${VAR} or ${VAR:-default}.
+#
+# Keep at least two models in the pool so the no-self-criticism rule can always
+# avoid the model that generated the response under review.
+
+server:
+  host: 127.0.0.1
+  port: 8090
+
+critic_models:
+  # --- Local reviewer (LM Studio) ---
+  reviewer_local:  { base_url: http://localhost:1234/v1, model: <reviewer-model-a>, api_key: lm-studio, connect_timeout: 10, read_timeout: 600 }
+
+  # --- Hosted/remote reviewer (any OpenAI-compatible API) ---
+  reviewer_remote: { base_url: https://api.openai.com/v1, model: <reviewer-model-b>, api_key: "${OPENAI_API_KEY}", connect_timeout: 10, read_timeout: 900 }
+
+selection:
+  default_model: reviewer_local
+  fallback_model: reviewer_remote   # used when the default would be self-criticism
+
+critic:
+  prompt_template: prompts/critic_system.txt
+  max_tokens: 1000                  # generous: reasoning critics need room before the JSON
+  temperature: 0.0
+  severity_scale: [CRITICAL, HIGH, OTHER, NONE]
+  quality_scale:  [EXCELLENT, GOOD, ADEQUATE, POOR]
+  consistency_rule: true
+
+routes:
+  - name: long_form_writing
+    quality_rubric: |
+      - Obeys all stated style/format constraints from the system prompt.
+      - Follows the required multi-step process and asks for feedback in turn.
+      - Clear thesis, coherent structure, logical flow.
+      - Genuine insight and depth rather than filler.
+  - name: coding
+    quality_rubric: |
+      - Correct and free of logic errors.
+      - Complete; handles relevant edge cases.
+      - Readable, idiomatic, maintainable.
+      - Safe; no obvious security or data-loss issues.
+  - name: agentic
+    quality_rubric: |
+      - Right tools/actions, sensibly sequenced.
+      - Real progress toward or completion of the goal.
+      - Efficient; avoids redundant steps.
+      - Safe side effects; verifies results.
+  - name: general
+    quality_rubric: |
+      - Accurate; no fabrication.
+      - Relevant and direct.
+      - Clear and appropriately concise.
+      - Helpful and complete without padding.
