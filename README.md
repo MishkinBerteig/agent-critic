@@ -33,6 +33,7 @@ response.
   - [The critic system prompt](#the-critic-system-prompt)
 - [Embedding in-process](#embedding-in-process)
 - [Development](#development)
+- [Contributing](#contributing)
 - [Security](#security)
 - [License](#license)
 
@@ -291,6 +292,12 @@ It's a baseline capability check for a critic model (can it tell a clearly
 correct answer from a clearly wrong one, quickly and consistently), not a
 frontier benchmark. See [evaluations/README.md](./evaluations/README.md) for the
 case format, flags, and how to add cases.
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for setup,
+tests, pull-request conventions, and how to add cases to the baseline
+[evaluations library](./evaluations/).
 
 ## Security
 
