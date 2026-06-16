@@ -31,7 +31,6 @@ response.
   - [No self-criticism](#no-self-criticism)
   - [Rubrics, scales, and the consistency rule](#rubrics-scales-and-the-consistency-rule)
   - [The critic system prompt](#the-critic-system-prompt)
-- [Reference deployment](#reference-deployment)
 - [Embedding in-process](#embedding-in-process)
 - [Development](#development)
 - [Security](#security)
@@ -245,21 +244,6 @@ point `critic.prompt_template` at your own file. Guidelines:
   scale values, so drifting from these keys/values degrades to fallback verdicts.
 - The template is read once and cached per path, so **restart the service** after
   editing (in Docker: `docker compose restart`).
-
-## Reference deployment
-
-The committed `config/config.example.yaml` is a template. The actual local
-deployment in this environment (`config/config.yaml`, gitignored) uses LM Studio
-on `127.0.0.1:12345`:
-
-| Pool key | Model | Role |
-|---|---|---|
-| reviewer_gemma | `gemma-4-31b-mlx` | default critic (non-reasoning → reliable JSON, fast) |
-| reviewer_qwen | `qwen3.6-35b-a3b` | fallback (used when gemma would be the generator) |
-
-So a qwen-generated answer is judged by gemma and vice versa. `critic.max_tokens`
-is `1000`, `temperature` `0.0`, `consistency_rule` on. The model `base_url`s
-default to `${LM_STUDIO_BASE:-http://127.0.0.1:12345/v1}`.
 
 ## Embedding in-process
 
