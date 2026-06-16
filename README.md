@@ -161,7 +161,7 @@ The configs in this repo reference:
 
 | Variable | Used by | Required? | Notes |
 |---|---|---|---|
-| `LM_STUDIO_BASE` | critic-model `base_url`s (reference deployment) | No (has a default) | Repoints the whole local pool at once, e.g. `http://host.docker.internal:12345/v1`. |
+| `LM_STUDIO_BASE` | critic-model `base_url`s | No (has a default) | Repoints the whole local pool at once, e.g. `http://host.docker.internal:12345/v1`. |
 | `OPENAI_API_KEY` | hosted critic `api_key` (example) | Only if you use a hosted endpoint that needs a key | Referenced as `${OPENAI_API_KEY}` (no default), so loading fails loudly if it's missing. |
 
 Add your own as needed — any `${VAR}` works. In Docker, set them under
