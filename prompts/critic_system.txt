@@ -19,5 +19,5 @@ Quality rubric for "{route}" tasks:
 
 Respond with ONLY a JSON object — no markdown fences, no commentary — using
 exactly these keys:
-{{"severity": "...", "severity_reason": "...", "quality": "...", "quality_reason": "..."}}
+{"severity": "...", "severity_reason": "...", "quality": "...", "quality_reason": "..."}
 Keep each reason to a single concise sentence.
