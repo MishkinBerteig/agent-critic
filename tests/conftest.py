@@ -37,7 +37,7 @@ routes:
 
 
 @pytest.fixture
-def config(tmp_path: Path):
+def config_path(tmp_path: Path) -> str:
     prompt = tmp_path / "critic_system.txt"
     prompt.write_text(
         "Severity: {severity_scale}\nQuality: {quality_scale}\nRoute: {route}\n"
@@ -48,7 +48,26 @@ def config(tmp_path: Path):
     cfg_path.write_text(
         CONFIG_YAML.replace("__PROMPT_TEMPLATE__", str(prompt)), encoding="utf-8"
     )
-    return load_config(cfg_path)
+    return str(cfg_path)
+
+
+@pytest.fixture
+def config(config_path: str):
+    return load_config(config_path)
+
+
+def make_request(**overrides):
+    """A valid CritiqueRequest with all required fields filled; override any."""
+    from agent_critic.models import CritiqueRequest
+
+    base = dict(
+        route="coding",
+        system_prompt="You are a coding assistant.",
+        user_prompt="Return the last element of a list.",
+        assistant_response="def last(xs): return xs[-1]",
+    )
+    base.update(overrides)
+    return CritiqueRequest(**base)
 
 
 def make_client(content: str):

@@ -126,7 +126,7 @@ Every critique response carries the `X-Agent-Critic: agent-critic/0.1` header.
 | Field | Required | Notes |
 |---|---|---|
 | `route` | yes | Selects the quality rubric. |
-| `system_prompt`, `user_prompt`, `assistant_response` | no | The exchange under review. |
+| `system_prompt`, `user_prompt`, `assistant_response` | yes | The exchange under review. All three are required; an empty/whitespace value counts as missing. A request missing any returns **400** with an `error` naming the missing field(s). |
 | `generator_model` | no | Excluded from critic selection (no self-criticism). |
 | `critic_model` | no | Pin a specific critic from the pool. |
 
@@ -210,7 +210,10 @@ from agent_critic.critic import critique_once
 
 cfg = load_config("config/config.yaml")
 env = asyncio.run(critique_once(cfg, CritiqueRequest(
-    route="coding", assistant_response="def last(xs): return xs[len(xs)]")))
+    route="coding",
+    system_prompt="You are a coding assistant.",
+    user_prompt="Return the last element of a list.",
+    assistant_response="def last(xs): return xs[len(xs)]")))
 print(env.severity, env.quality)
 ```
 

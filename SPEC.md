@@ -83,5 +83,16 @@ recommended conventions for OpenAI-compatible responses:
 }
 ```
 
-Returns a Critique Envelope. On any internal failure the service still returns a
-deterministic fallback envelope (never an error to the caller).
+`route`, `system_prompt`, `user_prompt`, and `assistant_response` are
+**required**; an empty or whitespace-only value for one of the three exchange
+fields counts as missing. A request missing any of them is rejected with HTTP
+`400` and a body naming the missing field(s):
+
+```json
+{ "error": "Missing required field(s): user_prompt, assistant_response" }
+```
+
+A well-formed request returns a Critique Envelope. The fallback-envelope
+guarantee covers *internal* failures only — once a request is accepted, any
+downstream failure (critic-model error, unparseable output) yields a
+deterministic fallback envelope rather than an error to the caller.

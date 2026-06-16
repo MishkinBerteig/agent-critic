@@ -44,11 +44,11 @@ def build_messages(config: Config, request: CritiqueRequest) -> list[dict]:
     system = render_system_prompt(config, request.route)
     user = (
         "[SYSTEM PROMPT GIVEN TO THE ASSISTANT]\n"
-        f"{request.system_prompt or '(none)'}\n\n"
+        f"{request.system_prompt}\n\n"
         "[USER REQUEST]\n"
-        f"{request.user_prompt or '(none)'}\n\n"
+        f"{request.user_prompt}\n\n"
         "[ASSISTANT RESPONSE TO EVALUATE]\n"
-        f"{request.assistant_response or '(empty)'}"
+        f"{request.assistant_response}"
     )
     return [
         {"role": "system", "content": system},

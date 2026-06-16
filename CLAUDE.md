@@ -51,5 +51,6 @@ Each pool entry is an independent OpenAI-compatible endpoint (`base_url` + `mode
 - The spec version is the single constant `SPEC_VERSION` in `src/agent_critic/__init__.py`. It appears in every envelope (`spec` field), the response header, and `/capabilities`. Bump it there if the envelope schema changes, and update `SPEC.md`.
 - No application-domain prompt text ships in this repo. Rubrics in config are written at the category level (`coding`, `long_form_writing`, `agentic`, `general`); the response under review supplies its own system prompt at runtime via the request body.
 - `CritiqueRequest` ignores extra fields; `Envelope` allows them — clients can pass extra context and the envelope's `meta` can carry extra keys.
+- `route`, `system_prompt`, `user_prompt`, and `assistant_response` are required on `CritiqueRequest` (a `model_validator` treats empty/whitespace as missing). This is request validation, distinct from the never-raises critique path: a malformed request returns HTTP 400 (via the `RequestValidationError` handler in `server.py`) naming the missing fields, whereas a downstream failure during an accepted critique returns a fallback envelope.
 
 See `PLAN.md` for design rationale and `SPEC.md` for the full envelope schema.

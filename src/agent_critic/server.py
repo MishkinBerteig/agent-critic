@@ -5,7 +5,8 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 
 import httpx
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from . import SPEC_VERSION
@@ -44,6 +45,19 @@ def create_app(config_path: str) -> FastAPI:
 
     app = FastAPI(title="Agent Critic", version="0.1.0", lifespan=lifespan)
     app.state.config = config
+
+    @app.exception_handler(RequestValidationError)
+    async def on_invalid_request(request: Request, exc: RequestValidationError):
+        # Surface a clean message (e.g. which required fields are missing)
+        # instead of FastAPI's default 422 error array.
+        messages = []
+        for err in exc.errors():
+            msg = str(err.get("msg", "")).removeprefix("Value error, ")
+            if err.get("type") == "missing":
+                loc = err.get("loc", ())
+                msg = f"Missing required field(s): {loc[-1]}" if loc else msg
+            messages.append(msg)
+        return JSONResponse(status_code=400, content={"error": "; ".join(messages)})
 
     @app.post("/v1/critique")
     async def critique_endpoint(request: CritiqueRequest):

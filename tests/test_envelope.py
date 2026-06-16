@@ -1,5 +1,6 @@
 from agent_critic.critic import build_envelope, extract_json
-from agent_critic.models import CritiqueRequest
+
+from .conftest import make_request
 
 
 def test_extract_plain_json():
@@ -23,7 +24,7 @@ def test_extract_returns_none_on_garbage():
 
 
 def _req():
-    return CritiqueRequest(route="coding", assistant_response="x")
+    return make_request()
 
 
 def test_build_envelope_normalizes_case(config):
