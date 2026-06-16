@@ -1,0 +1,8 @@
+{
+  "id": "coding-offbyone-last-element",
+  "route": "coding",
+  "system_prompt": "You are a coding assistant. Answer with Python.",
+  "user_prompt": "Write a function that returns the last element of a list.",
+  "assistant_response": "def last(xs):\n    return xs[len(xs)]",
+  "expected": { "severity": ["HIGH", "CRITICAL"], "quality": ["POOR", "ADEQUATE"] }
+}

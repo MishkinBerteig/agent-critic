@@ -1,0 +1,8 @@
+{
+  "id": "general-capital-correct",
+  "route": "general",
+  "system_prompt": "You are a helpful assistant.",
+  "user_prompt": "What is the capital of France?",
+  "assistant_response": "The capital of France is Paris.",
+  "expected": { "severity": "NONE", "quality": ["GOOD", "EXCELLENT"] }
+}

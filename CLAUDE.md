@@ -19,6 +19,8 @@ uv run ruff check src tests        # lint
 uv run ruff check --fix src tests  # lint + autofix
 uv run ruff format src tests       # format
 
+agent-critic-eval --config config/config.yaml   # baseline evals: run evaluations/cases/*.json N× against a critic model
+
 agent-critic --config config/config.yaml   # run the service (after `uv tool install .` or in the venv)
 docker compose up -d                        # containerized; publishes :8090, bind-mounts config/config.yaml
 ```
@@ -37,6 +39,7 @@ The request flow lives in `src/agent_critic/` and is a single pass with no persi
 4. **`critic.py`** — the core. `critique(client, config, request)` renders the prompt, POSTs to the chosen model's OpenAI-compatible `/chat/completions` (temp 0), then `extract_json` pulls the first balanced JSON object from the reply, `_normalize` validates values against the scales, and `build_envelope` applies the consistency rule (a CRITICAL/HIGH severity clamps quality to ADEQUATE, recording `consistency_clamped_from` in `meta`).
 5. **`server.py`** — `create_app(config_path)` wires three endpoints: `POST /v1/critique`, `GET /capabilities`, `GET /healthz`. A single shared `httpx.AsyncClient` is created in the lifespan and reused across requests. Every critique response carries the `X-Agent-Critic: agent-critic/0.1` header.
 6. **`cli.py`** — `agent-critic` console script; argparse `--config/--host/--port` over the config's server block.
+7. **`evaluate.py`** — the `agent-critic-eval` console script and baseline-evaluation harness. Loads `evaluations/rubrics.yaml` + `evaluations/cases/*.json`, **injects those rubrics into the config's `routes`** (so the rubric travels with the eval set, not the deployment config), runs each case N× (default 5) via `critique`, and reports per-case severity/quality compliance + latency. Cases are deliberately simple/obvious. A fallback envelope never counts as compliant. `tests/test_evaluations.py` validates the shipped cases and the pure logic without a live model.
 
 ### Key invariant: `critique()` never raises
 

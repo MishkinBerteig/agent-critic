@@ -1,0 +1,8 @@
+{
+  "id": "coding-correct-add",
+  "route": "coding",
+  "system_prompt": "You are a coding assistant. Answer with Python.",
+  "user_prompt": "Write a function add(a, b) that returns the sum of two numbers.",
+  "assistant_response": "def add(a, b):\n    return a + b",
+  "expected": { "severity": "NONE", "quality": ["GOOD", "EXCELLENT"] }
+}

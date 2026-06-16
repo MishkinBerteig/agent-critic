@@ -1,0 +1,19 @@
+# Quality rubrics used by the baseline evaluation cases.
+#
+# The harness injects these into the critic config at run time, so the rubric
+# that judges each case travels with the evaluation set — independent of the
+# routes your deployment's config.yaml happens to define. Each case file
+# references one of these routes by name.
+routes:
+  - name: coding
+    quality_rubric: |
+      - Correct and free of logic errors.
+      - Complete; handles relevant edge cases.
+      - Readable, idiomatic, maintainable.
+      - Safe; no obvious security or data-loss issues.
+  - name: general
+    quality_rubric: |
+      - Accurate; no fabrication.
+      - Relevant and direct.
+      - Clear and appropriately concise.
+      - Helpful and complete without padding.

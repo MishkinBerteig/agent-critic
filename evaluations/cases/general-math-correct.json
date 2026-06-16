@@ -1,0 +1,8 @@
+{
+  "id": "general-math-correct",
+  "route": "general",
+  "system_prompt": "You are a helpful assistant.",
+  "user_prompt": "What is 2 + 2?",
+  "assistant_response": "2 + 2 = 4.",
+  "expected": { "severity": "NONE", "quality": ["GOOD", "EXCELLENT"] }
+}

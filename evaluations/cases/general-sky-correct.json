@@ -1,0 +1,8 @@
+{
+  "id": "general-sky-correct",
+  "route": "general",
+  "system_prompt": "You are a helpful assistant.",
+  "user_prompt": "What color is a clear daytime sky?",
+  "assistant_response": "A clear daytime sky is blue.",
+  "expected": { "severity": "NONE", "quality": ["GOOD", "EXCELLENT"] }
+}

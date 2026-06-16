@@ -17,6 +17,7 @@ dependencies = [
 
 [project.scripts]
 agent-critic = "agent_critic.cli:main"
+agent-critic-eval = "agent_critic.evaluate:main"
 
 [project.optional-dependencies]
 dev = [

@@ -289,8 +289,24 @@ uv run pytest            # unit tests; mocked critic-model client, no live model
 ```
 
 Layout: `src/agent_critic/` (`config`, `models`, `selection`, `prompts`,
-`critic`, `server`, `cli`); tests under `tests/`. See [PLAN.md](./PLAN.md) for
-design notes and [SPEC.md](./SPEC.md) for the envelope schema.
+`critic`, `server`, `cli`, `evaluate`); tests under `tests/`. See
+[PLAN.md](./PLAN.md) for design notes and [SPEC.md](./SPEC.md) for the envelope
+schema.
+
+### Baseline evaluations
+
+`evaluations/` holds a set of simple, "obvious" example exchanges with expected
+verdicts, plus a harness that runs each one repeatedly against a critic model
+and reports compliance and latency:
+
+```bash
+agent-critic-eval --config config/config.yaml   # runs every case 5×
+```
+
+It's a baseline capability check for a critic model (can it tell a clearly
+correct answer from a clearly wrong one, quickly and consistently), not a
+frontier benchmark. See [evaluations/README.md](./evaluations/README.md) for the
+case format, flags, and how to add cases.
 
 ## Security
 
